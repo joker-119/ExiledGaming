@@ -1,4 +1,4 @@
-# Exiled Gaming Modded Changelog
+# Joker's Playground Modded Changelog
 
 ## New Mechanics
 
