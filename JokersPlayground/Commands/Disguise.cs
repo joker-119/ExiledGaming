@@ -17,7 +17,7 @@ namespace JokersPlayground.Commands
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission("dden.disguise"))
+            if (!((CommandSender) sender).CheckPermission("jp.disguise"))
             {
                 response = "You are not permitted to run this command.";
                 return false;

@@ -12,7 +12,7 @@ namespace JokersPlayground.Commands
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!sender.CheckPermission("dden.victory"))
+            if (!sender.CheckPermission("jp.victory"))
             {
                 response = "You are not permitted to run this command.";
                 return false;
