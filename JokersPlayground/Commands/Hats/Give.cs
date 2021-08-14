@@ -14,7 +14,7 @@ namespace JokersPlayground.Commands.Hats
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!sender.CheckPermission("dden.hats.give"))
+            if (!sender.CheckPermission("jp.hats.give"))
             {
                 response = "You are not permitted to run this command.";
                 return false;
