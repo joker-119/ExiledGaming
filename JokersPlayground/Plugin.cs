@@ -55,7 +55,7 @@ namespace JokersPlayground
         public override void OnEnabled()
         {
             Instance = this;
-            Harmony = new Harmony($"com.joker.dden-{DateTime.Now.Ticks}");
+            Harmony = new Harmony($"com.joker.jp-{DateTime.Now.Ticks}");
 
             try
             {
