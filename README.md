@@ -1,8 +1,10 @@
-# Joker's Playground Modded Changelog
+# Exiled Gaming Modded Changelog
 
 ## New Mechanics
 
 - `[Chaos On Start]` There is 20% chance when a round begins that all Facility Guards will be replaced with Chaos Insurgency.
+
+- `[Chaos Spawn Announcement]` Not including the above initial spawn, whenever Chaos Insurgency has a respawn wave, C.A.S.S.I.E. will make an announcement.
 
 - `[Spectate Void]` Spectators will see a "Void" spectate choice while dead. This will make them spectate an empty void, which allows them to hear spectator chat without having to hear proximity chat around whoever they are spectating.
 
@@ -78,16 +80,20 @@
 	- 40% HCZ Armory, otherwise MicroHID room. 1 shot per clip, 750% normal E-11 damage Long Barrel, Sniper scope and no 3rd attachment. Attachments on this weapon cannot be changed.
 
 - `[TG-119]` This gun is also modified to fire self-injecting projectile darts. When fired at a hostile target, it will tranquilize them, rendering them unconscious for several seconds. 
-	- 50% GR-18, 80% Locked room by 173 spawn. Not guaranteed to spawn. 2 shots per clip. 0 damage. 5sec tranq duration. Causes victim to drop all items. SCPs have 40% chance to resist. SCP-173 immune. Humans who are repeatidly tranq'd in a short time have an exponentially higher chance to resist each time it succeeds.
+	- 50% GR-18, 80% Locked room by 173 spawn. Not guaranteed to spawn. 
+	- 2 shots per clip. 0 damage. 5sec tranq duration. 
+	- Causes victim to drop all items. 
+	- SCPs have 40% chance to resist. SCP-173 immune. 
+	- Humans who are repeatedly tranq'd in a short time will have an increased resistance to the effect, making it last a shorter time.
 
 - `[Rock]` This is a rock. Left-click to melee someone in the face with it. Left-click to toss it a short distance. 
-	- Is a SCP-018. Spawns in a random locker. Melee hit: 10dmg Throw hit: 20dmg. Does not bounce when thrown. Hynx's favorite item.
+	- Is a SCP-018. Spawns in a random locker. Melee hit: 10dmg Throw hit: 20dmg. Does not bounce when thrown.
 
 - `[SCP-1499]` The gas mask that teleports you to another dimension, when you put it on. 
 	- 10% inside MicroHID. You are returned to where you used the item when you try to drop it in the "dimension", or after 15sec.
 
 - `[SCP-714]` A coin that, when held in your hand, makes you invulnerable to SCP-049 and SCP-049-2. However, as you hold the coin, your stamina will slowly drain. If you run out, your health will start to drain. 
-	- 50% in 049 Armory.
+	- 50% chance to spawn in a random locker.
 
 - `[AM-119]` Pills that, when consumed, make you forget SCP-096's face if you have recently seen it. Removing you from being one of his targets, with some side effects. 
 	- Spawns in locked room behind 096 spawn. Gives you "Amnesia" effect for 10s after use.
@@ -97,9 +103,6 @@
 
 - `[C4-119]` A frag-grenade with a much longer than normal fuse, that will stick to the first solid surface it comes in contact with. It can be detonated using a console command. ".detonate" while holding a Radio in your hand. 
 	- Detonation range of 100meters. Must have radio in your hand to use command. Recommend keybinding command with "cmdbind LETTER .det" where LETTER is a unused letter on your keyboard.
-
-- `[939 Infused Serum]` A unique shot of adrenaline that will, when injected, allow the user to see sounds similar to how SCP-939 does for a short time, at the expense of diminished healing capabilities. 
-	- Spawns in a random locker. Gives 50 AHP and 10 health. Gives full 939 vision for 30sec.
 
 - `[SCP-035]` An item that takes many different forms. When picked up, the victim will start corroding quickly. If not dropped within a few seconds, the victim will become a bloodthirsty monster, hellbent on the destruction of humans. However the host is slowly damaged over time, until their body is no longer capable of functioning and they die. They will appear as a shorter, fatter SCP-049, with a very stylish hat. 
 	- 15% spawn chance in a random locker. Victim has 3.5s to drop item before becoming 035. Host is damaged for 2.5/sec after transformation. 500 health. Host maintains control of their character, and are considered an SCP. Host is able to use items and weapons. Hosts is unable to use the following items: MicroHID, SR-119
@@ -119,24 +122,21 @@
 - `[Dwarf]` Every round, there is a moderate chance a random human player will be choosen to be a Dwarf for the entire round. Dwarves are natural sprinters, as such, they do not consume stamina, though their shortness often becomes the target of mockery from others.
 	- 35% chance to pick random human player when round starts. Role is maintained through respawns.
 
-- `[Demolitionist]` A specially outfitted NTF Lt. trained in explosive ordinance. They are equipped with a GL-119, 2 C4 charges, and 5 Fragmentation Grenades.
-	- 40% chance to replace random respawned player during NTF waves.
-
-- `[Shotgunner]` A Chaos Insurgency soldier outfitted for close-quarters combat. They are equipped with an SG-119, IG-119, COM-15, Medkit, Painkillers, Adrenaline Shot and a Hacking device.
-	- 40% chance to replace random respawned player during CI waves.
-
 - `[Ballistic Zombie]` A mutated zombie that is otherwise normal, until their death, at which time their body will explode, dealing damage to anyone nearby.
 
-- `[Pocket Dimension Zombie]` A mutated zombie that was subjected to SCP-106 too many times in their human life. They are resistant to ballistic damage, and have a small chance to teleport victims to the Pocket Dimension when they attack them.
-
 - `[Plague Zombie]` A mutated zombie that moves slower than normal zombies, and deal less up-front damage with their attacks, however they have a large chance to infect their victims with SCP-008. Anyone who dies while infected with SCP-008 will immediately become a zombie upon death.
-
-- `[Medic Zombie]` A former NTF Medic that, while slower, retained the ability to activate their healing ability, however now, it will heal other SCPs, instead of humans. They also do slightly less damage than normal zombies.
+    - Can launch projectiles once every 60sec that will explode on impact. Humans who are near the explosion will take a small amount of damage and be infected with SCP-008 for 20seconds.
 
 - `[Berzerk Zombie]` This zombie is extremely bloodthirsty. While they have less health than normal zombies, their attacks deal significantly more damage, and they gain a temporary speed boost each time they kill someone.
+    - When a berzerk zombie kills a player, there will be a high chance for the zombie to gain a heal over time effect, that will heal them for up to 80 health over 5sec. 
+        - Healing is applied every 0.5sec during the duration.
+        - Damage taken while the effect is active will cancel the remaining duration of the effect.
 
-- `[Juggernaut Zombie]` The tank of zombies. This zombie moves more slowly than normal, however they are very difficult to kill, as they have double the health of a normal zombie.
-	- All zombies have a 45% chance to be replaced with a mutation when they spawn as a zombie
+- `[Juggernaut Zombie]` The tank of zombies. This zombie moves more slowly than normal, however they are very difficult to kill.
+	- Juggernaut zombies spawn with twice the normal health of a zombie.
+	- As the Juggernaut takes damage, a portion of it will be added to their AHP bar. As the bar fills, it will cause incoming damage to be reduced by up to 80%. 
+	    - The AHP value added by a damage event is only taken into account for future damage events. If the zombie with 0 AHP takes 600 damage in a single hit, it will add 450 to their AHP meter, however they will still take the full 600 damage from that initial hit. 
+	    - The zombies AHP meter has a maximum value of 500. Damage is reduced based on the % of max AHP they have, up to 80% damage reduction.
 
 ## Bug Fixes
 
