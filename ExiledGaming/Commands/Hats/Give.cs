@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace ExiledGaming.Commands.Hats
 {
+    using Exiled.API.Enums;
+
     public class Give : ICommand
     {
         public string Command { get; } = "give";

@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace ExiledGaming.Patches
 {
-    [HarmonyPatch(typeof(NineTailedFoxAnnouncer), nameof(NineTailedFoxAnnouncer.CheckForZombies))]
+    [HarmonyPatch(typeof(Recontainer079), nameof(Recontainer079.OnClassChanged))]
     public class Recontain079Fix
     {
-        internal static bool Prefix(GameObject zombie)
+        internal static bool Prefix(ReferenceHub hub, RoleType prevRole, RoleType newRole)
         {
             int num = 0;
 
             foreach (Player player in Player.List)
             {
-                if (player.GameObject == zombie) 
+                if (player.ReferenceHub == hub) 
                     continue;
                 
                 if (player.Role != RoleType.Scp079 && player.Side == Side.Scp)
@@ -32,14 +32,10 @@ namespace ExiledGaming.Patches
                 }
             }
             
-            if (num > 0 || Generator079.mainGenerator.totalVoltage > 4 || Generator079.mainGenerator.forcedOvercharge)
+            if (num > 0)
                 return false;
-            
-            Generator079.mainGenerator.forcedOvercharge = true;
-            Recontainer079.BeginContainment(true);
-            NineTailedFoxAnnouncer.singleton.ServerOnlyAddGlitchyPhrase("ALLSECURED . SCP 0 7 9 RECONTAINMENT SEQUENCE COMMENCING . FORCEOVERCHARGE", 0.1f, 0.07f);
 
-            return false;
+            return true;
         }
     }
 }

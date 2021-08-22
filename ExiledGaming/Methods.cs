@@ -18,9 +18,9 @@ namespace ExiledGaming
 {
     using CustomPlayerEffects;
     using CustomRoles.Roles;
+    using Exiled.API.Features.Items;
     using ExiledGaming.Commands.Hats;
     using Interactables.Interobjects.DoorUtils;
-    using Role = Exiled.API.Extensions.Role;
 
     public class Methods
     {
@@ -34,55 +34,6 @@ namespace ExiledGaming
 
         public bool CheckFor035(Player player) => Scp035Players.Contains(player);
         public bool CheckForHat(Pickup pickup) => Hats.Contains(pickup);
-
-        public void SpawnMicroHidPlayer(Vector3 pos, Quaternion rot)
-        {
-            GameObject obj =
-                Object.Instantiate(
-                    NetworkManager.singleton.spawnPrefabs.FirstOrDefault(p => p.gameObject.name == "Player"));
-            CharacterClassManager ccm = obj.GetComponent<CharacterClassManager>();
-
-            obj.transform.position = pos;
-            obj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            obj.transform.rotation = rot;
-
-            QueryProcessor processor = obj.GetComponent<QueryProcessor>();
-            processor.NetworkPlayerId = QueryProcessor._idIterator++;
-            processor._ipAddress = "127.0.0.1";
-
-            ccm.CurClass = RoleType.ClassD;
-            obj.GetComponent<PlayerStats>().SetHPAmount(ccm.Classes.SafeGet(RoleType.ClassD).maxHP);
-            obj.GetComponent<NicknameSync>().Network_myNickSync = "MicroNPC";
-
-            ServerRoles roles = obj.GetComponent<ServerRoles>();
-            roles.MyText = "NPC";
-            roles.MyColor = "red";
-            if (ccm.CurRole.model_player.GetComponent<Renderer>() == null)
-                Log.Warn("Render thingy null");
-            NetworkServer.Spawn(obj);
-
-            Player player = new Player(obj);
-            
-            Player.Dictionary.Add(obj, player);
-            Player.IdsCache.Add(player.Id, player);
-            
-            player.SessionVariables.Add("MicroNPC", true);
-            player.Inventory.SetCurItem(ItemType.MicroHID);
-            MicroHID micro = obj.GetComponent<MicroHID>();
-            if (micro == null)
-            {
-                Log.Error("Micro is null");
-                return;
-            }
-
-            Timing.CallDelayed(1.5f, () =>
-            {
-                micro.chargeup = 1.5f;
-                micro.damagePerSecond = 2;
-                micro.NetworkCurrentHidState = MicroHID.MicroHidState.Discharge;
-                _plugin.Coroutines.Add(Timing.RunCoroutine(GeneratorZap(pos, obj.transform.forward, player)));
-            });
-        }
 
         public void SpawnVoid()
         {
@@ -129,14 +80,14 @@ namespace ExiledGaming
                 writer
                     =>
                 {
-                    writer.WritePackedUInt64(1ul);
-                    writer.WritePackedUInt32(1);
+                    writer.WriteUInt64(1ul);
+                    writer.WriteUInt32(1);
                     writer.WriteByte((byte)SyncList<byte>.Operation.OP_CLEAR);
                 });
             
             if (target.Team != Team.SCP)
             {
-                target.SendFakeSyncVar(Server.Host.ReferenceHub.networkIdentity, typeof(CharacterClassManager), nameof(CharacterClassManager.NetworkCurClass), (sbyte)RoleType.NtfCommander);
+                target.SendFakeSyncVar(Server.Host.ReferenceHub.networkIdentity, typeof(CharacterClassManager), nameof(CharacterClassManager.NetworkCurClass), (sbyte)RoleType.NtfCaptain);
                 target.UnitName = string.Empty;
             }
         }
@@ -146,48 +97,14 @@ namespace ExiledGaming
             Log.Debug($"{nameof(SendFakeUnitName)}: Sending {target.Nickname} a fake unit name: {name}");
             MirrorExtensions.SendFakeSyncObject(target, RespawnManager.Singleton.NamingManager.netIdentity, typeof(UnitNamingManager), writer =>
             {
-                writer.WritePackedUInt64(1ul);
-                writer.WritePackedUInt32(1);
+                writer.WriteUInt64(1ul);
+                writer.WriteUInt32(1);
                 writer.WriteByte((byte)SyncList<byte>.Operation.OP_ADD);
                 writer.WriteByte((byte)spawnableTeamType);
                 writer.WriteString(name);
             });
-            target.SendFakeSyncVar(Server.Host.ReferenceHub.networkIdentity, typeof(CharacterClassManager), nameof(CharacterClassManager.NetworkCurClass), (sbyte)RoleType.NtfCommander);
+            target.SendFakeSyncVar(Server.Host.ReferenceHub.networkIdentity, typeof(CharacterClassManager), nameof(CharacterClassManager.NetworkCurClass), (sbyte)RoleType.NtfCaptain);
             target.UnitName = target.Role.ToString();
-        }
-
-        private IEnumerator<float> GeneratorZap(Vector3 startPos, Vector3 forward, Player ply)
-        {
-            for (int i = 0; i < _plugin.Config.GeneratorDischargeDuration * 2; i++)
-            {
-                foreach (Player player in Player.List)
-                    if (IsPointInsideCone(player.Position, startPos, forward))
-                    {
-                        player.Hurt(5f, DamageTypes.MicroHid, "Generator");
-                        
-                        if (_plugin.Config.GeneratorDischargeEffectDuration >= 0)
-                            player.EnableEffect(_plugin.Config.GeneratorDischageEffect, _plugin.Config.GeneratorDischargeEffectDuration);
-                    }
-
-                yield return Timing.WaitForSeconds(0.5f);
-            }
-            
-            NetworkServer.Destroy(ply.GameObject);
-        }
-
-        public void GeneratorCharge(Generator079 generator)
-        {
-            Transform transform = generator.transform;
-            Vector3 position = transform.position;
-
-            Vector3 pos1 = position + transform.forward * 1.15f + transform.up * 1.5f;
-            
-            Log.Debug($"{nameof(GeneratorCharge)}: Spawning MicroNPC at {pos1}", _plugin.Config.Debug);
-            Quaternion rotation = transform.rotation;
-            Log.Debug($"{nameof(GeneratorCharge)}: Spawning NPC 1", _plugin.Config.Debug);
-            SpawnMicroHidPlayer(pos1, Quaternion.Inverse(rotation));
-            Log.Debug($"{nameof(GeneratorCharge)}: Spawning NPC 2", _plugin.Config.Debug);
-            SpawnMicroHidPlayer(pos1, rotation);
         }
 
         private bool IsPointInsideCone(Vector3 point, Vector3 coneOrigin, Vector3 coneDirection)
@@ -260,7 +177,7 @@ namespace ExiledGaming
             {
                 Log.Debug($"{nameof(InitialCiSpawn)}: Spawning CI.", _plugin.Config.Debug);
                 foreach (Player player in Player.Get(RoleType.FacilityGuard))
-                    player.Role = RoleType.ChaosInsurgency;
+                    player.Role = RoleType.ChaosConscript;
             }
         }
 
@@ -477,7 +394,7 @@ namespace ExiledGaming
 
             for (;;)
             {
-                if (!Round.IsStarted || !Map.IsLCZDecontaminated)
+                if (!Round.IsStarted || !Map.IsLczDecontaminated)
                     yield break;
                 foreach (Player player in Player.List)
                 {
@@ -555,11 +472,11 @@ namespace ExiledGaming
             foreach (Player p in Player.List)
                 if (p.Role == RoleType.Scp049)
                     father = p;
-            player.Position = father?.Position ?? Role.GetRandomSpawnPoint(RoleType.Scp93953);
+            player.Position = father?.Position ?? RoleType.Scp93953.GetRandomSpawnProperties().Item1;
         }
 
-        private List<DoorVariant> closingDoors = new List<DoorVariant>();
-        public void CloseDoor(DoorVariant door)
+        private List<Door> closingDoors = new List<Door>();
+        public void CloseDoor(Door door)
         {
             if (closingDoors.Contains(door))
                 return;
@@ -570,7 +487,7 @@ namespace ExiledGaming
                 closingDoors.Remove(door);
                 
                 if (!Warhead.IsInProgress && !Warhead.IsDetonated)
-                    door.NetworkTargetState = false;
+                    door.Open = false;
             });
         }
     }

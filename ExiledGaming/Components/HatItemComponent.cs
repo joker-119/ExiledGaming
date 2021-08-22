@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ExiledGaming.Components
 {
     using System;
+    using Exiled.API.Features.Items;
 
     internal class HatItemComponent : MonoBehaviour
     {

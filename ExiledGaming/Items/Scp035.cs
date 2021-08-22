@@ -13,6 +13,8 @@ using YamlDotNet.Serialization;
 
 namespace ExiledGaming.Items
 {
+    using Exiled.API.Enums;
+    using Exiled.API.Features.Items;
     using Exiled.CustomItems.API;
     using ExiledGaming.Components;
 
@@ -23,6 +25,8 @@ namespace ExiledGaming.Items
 
         public override string Description { get; set; } =
             "An item that will quickly kill you and turn you into an SCP";
+
+        public override float Weight { get; set; } = 0.75f;
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties
         {
@@ -45,8 +49,8 @@ namespace ExiledGaming.Items
             new ItemSpawn(ItemType.Coin, 10),
             new ItemSpawn(ItemType.Medkit, 20),
             new ItemSpawn(ItemType.Adrenaline, 30),
-            new ItemSpawn(ItemType.SCP018, 60),
-            new ItemSpawn(ItemType.GrenadeFrag, 100)
+            new ItemSpawn(ItemType.Scp018, 60),
+            new ItemSpawn(ItemType.GrenadeHe, 100)
         };
 
         public float TransformationDelay { get; set; } = 5f;
@@ -58,7 +62,12 @@ namespace ExiledGaming.Items
 
         public static List<Player> ChangedPlayers = new List<Player>();
 
-        public override void Spawn(Vector3 position, out Pickup pickup) => Spawned.Add(pickup = RandomType().Spawn(1f, position));
+        public override void Spawn(Vector3 position, out Pickup pickup)
+        {
+            pickup = new Item(RandomType()).Spawn(position);
+            pickup.Weight = Weight;
+            Spawned.Add(pickup);
+        }
 
         private ItemType RandomType()
         {
@@ -90,9 +99,9 @@ namespace ExiledGaming.Items
             component.maxHealth = MaxHealth;
             component.role = Role;
             
-            foreach (Inventory.SyncItemInfo item in player.Inventory.items.ToList())
+            foreach (Item item in player.Items.ToList())
                 if (Check(item))
-                    player.Inventory.items.Remove(item);
+                    player.DropItem(item);
         }
 
         protected override void OnPickingUp(PickingUpItemEventArgs ev)

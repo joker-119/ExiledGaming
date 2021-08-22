@@ -14,20 +14,22 @@ using UnityEngine;
 
 namespace ExiledGaming.Components
 {
-    using Dissonance.Integrations.MirrorIgnorance;
     using Exiled.API.Enums;
+    using Exiled.API.Features.Items;
+    
+    using Dissonance.Integrations.MirrorIgnorance;
     using ExiledGaming.Items;
-    using UnityEngine.Serialization;
+    using Ragdoll = Exiled.API.Features.Ragdoll;
 
     public class Scp035Component : MonoBehaviour
     {
-        [FormerlySerializedAs("MaxHealth")] public int maxHealth;
-        [FormerlySerializedAs("Role")] public RoleType role;
+        public int maxHealth;
+        public RoleType role;
         public Player Player;
 
-        [FormerlySerializedAs("BlacklistedItems")] public List<string> blacklistedItems = new List<string>
+        public List<string> blacklistedItems = new List<string>
         {
-            ItemType.MicroHID.ToString(),
+            ItemType.MicroHid.ToString(),
             "SR-119",
             "SCP-2818",
             "AutoGun",
@@ -52,11 +54,11 @@ namespace ExiledGaming.Components
             Player.UnitName = "Scp035";
 
             Plugin.Instance.Methods.Scp035Players.Add(Player);
-            HatInfo info = new HatInfo(ItemType.SCP268);
-            Player.SetRole(RoleType.Tutorial, true);
+            HatInfo info = new HatInfo(ItemType.Scp268);
+            Player.SetRole(RoleType.Tutorial, SpawnReason.ForceClass, true);
             Player.Health = maxHealth;
             Timing.CallDelayed(1.5f, () => Player.ChangeAppearance(role));
-            Player.SpawnHat(new HatInfo(ItemType.SCP268));
+            Player.SpawnHat(new HatInfo(ItemType.Scp268));
             Player.ShowHint("You have become SCP-035");
             Player.SpawnHat(info);
             Timing.CallDelayed(1f, () => Player.IsGodModeEnabled = false);
@@ -72,12 +74,12 @@ namespace ExiledGaming.Components
             dissonance.EnableSpeaking(TriggerType.Role, Assets._Scripts.Dissonance.RoleType.SCP);
             dissonance.SCPChat = true;
 
-            foreach (Inventory.SyncItemInfo item in Player.Inventory.items.ToList())
+            foreach (Item item in Player.Items.ToList())
             {
                 if (CustomItem.TryGet(item, out CustomItem customItem))
                 {
                     customItem.Spawn(Player.Position, item, out _);
-                    Player.Inventory.items.Remove(item);
+                    Player.RemoveItem(item);
                 }
             }
 
@@ -138,14 +140,14 @@ namespace ExiledGaming.Components
 
         private bool CheckItem(Pickup item)
         {
-            return (CustomItem.TryGet(item, out CustomItem customItem) && blacklistedItems.Contains(customItem.Name)) ||
-                   blacklistedItems.Contains(item.itemId.ToString());
+            return CustomItem.TryGet(item, out CustomItem customItem) && blacklistedItems.Contains(customItem.Name) ||
+                   blacklistedItems.Contains(item.Type.ToString());
         }
 
-        private bool CheckItem(Inventory.SyncItemInfo item)
+        private bool CheckItem(Item item)
         {
             return CustomItem.TryGet(item, out CustomItem customItem) && blacklistedItems.Contains(customItem.Name) ||
-                   blacklistedItems.Contains(item.id.ToString());
+                   blacklistedItems.Contains(item.Type.ToString());
         }
 
         private void OnPickingUpItem(PickingUpItemEventArgs ev)
@@ -175,7 +177,7 @@ namespace ExiledGaming.Components
             {
                 CustomRoles.Plugin.Singleton.StopRagdollList.Add(Player);
                 Role role = CharacterClassManager._staticClasses.SafeGet(this.role);
-                Ragdoll.Info info = new Ragdoll.Info
+                global::Ragdoll.Info info = new global::Ragdoll.Info
                 {
                     ClassColor = role.classColor,
                     DeathCause = ev.HitInformation,
@@ -184,12 +186,12 @@ namespace ExiledGaming.Components
                     ownerHLAPI_id = Player.GameObject.GetComponent<MirrorIgnorancePlayer>().PlayerId,
                     PlayerId = Player.Id,
                 };
-                Exiled.API.Features.Ragdoll.Spawn(role, info, Player.Position, Quaternion.Euler(Player.Rotation));
+                Ragdoll.Spawn(role, info, Player.Position, Quaternion.Euler(Player.Rotation));
                 string message = "scp 0 3 5 has been successfully terminated .";
 
                 if (ev.Killer != null && ev.Killer.Side == Side.Mtf && !string.IsNullOrEmpty(ev.Killer.UnitName))
                     message += $" termination cause {ev.Killer.UnitName}";
-                else if (ev.HitInformation.Tool == 5 && ev.Killer == null)
+                else if (ev.HitInformation.Tool.Equals(DamageTypes.Tesla) && (ev.Killer == null || ev.Killer == Player))
                     message += $" by automatic security system";
                 else
                     message += " termination cause unspecified";

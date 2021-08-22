@@ -21,7 +21,7 @@ namespace ExiledGaming.EventHandlers
             if (SpawnProtected.Contains(ev.Target) && ev.DamageType == DamageTypes.Grenade)
                 ev.IsAllowed = false;
 
-            if ((ev.Target.Role == RoleType.Tutorial && !_plugin.Methods.CheckFor035(ev.Target)) || (ev.Target.IsCuffed && ev.DamageType.isWeapon))
+            if ((ev.Target.Role == RoleType.Tutorial && !_plugin.Methods.CheckFor035(ev.Target)) || (ev.Target.IsCuffed && ((ItemType)ev.DamageType.Weapon).IsWeapon()))
                 ev.Amount = 0;
 
             if (ev.Target.Role == RoleType.Scp0492 && ev.DamageType == DamageTypes.Wall)
@@ -39,28 +39,31 @@ namespace ExiledGaming.EventHandlers
             Timing.CallDelayed(1.5f, () => ev.Target.DisableEffect<Decontaminating>());
         }
 
-        public void OnChangedRole(ChangedRoleEventArgs ev)
+        public void OnChangedRole(ChangingRoleEventArgs ev)
         {
-            if (ev.Player.Team == Team.SCP)
+            Timing.CallDelayed(1f, () =>
             {
-                ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.PowerStatus;
-                ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.UnitName;
-            }
-            else
-            {
-                ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.PowerStatus;
-                ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.UnitName;
-            }
+                if (ev.Player.Team == Team.SCP)
+                {
+                    ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.PowerStatus;
+                    ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.UnitName;
+                }
+                else
+                {
+                    ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.PowerStatus;
+                    ev.Player.ReferenceHub.nicknameSync.ShownPlayerInfo |= PlayerInfoArea.UnitName;
+                }
 
-            Timing.CallDelayed(1.5f, () => _plugin.Methods.RefreshScpUnits(ev.Player));
+                Timing.CallDelayed(1.5f, () => _plugin.Methods.RefreshScpUnits(ev.Player));
 
-            if (!SpawnProtected.Contains(ev.Player))
-                SpawnProtected.Add(ev.Player);
+                if (!SpawnProtected.Contains(ev.Player))
+                    SpawnProtected.Add(ev.Player);
 
-            Timing.CallDelayed(_plugin.Config.SpawnProtection, () => SpawnProtected.Remove(ev.Player));
+                Timing.CallDelayed(_plugin.Config.SpawnProtection, () => SpawnProtected.Remove(ev.Player));
 
-            if (ev.Player.Role == RoleType.Tutorial && !_plugin.Methods.CheckFor035(ev.Player))
-                ev.Player.NoClipEnabled = true;
+                if (ev.Player.Role == RoleType.Tutorial && !_plugin.Methods.CheckFor035(ev.Player))
+                    ev.Player.NoClipEnabled = true;
+            });
         }
 
         public void OnPickingUpItem(PickingUpItemEventArgs ev)
@@ -86,13 +89,13 @@ namespace ExiledGaming.EventHandlers
             _plugin.Methods.DoLateJoin(ev.Player);
         }
 
-        public void OnInsertingGeneratorTablet(InsertingGeneratorTabletEventArgs ev)
+        public void OnInsertingGeneratorTablet(ActivatingGeneratorEventArgs ev)
         {
             if (ev.Player.Role == RoleType.Tutorial)
                 ev.IsAllowed = false;
         }
 
-        public void OnEjectingGeneratorTablet(EjectingGeneratorTabletEventArgs ev)
+        public void OnEjectingGeneratorTablet(StoppingGeneratorEventArgs ev)
         {
             if (ev.Player.Role == RoleType.Tutorial && !_plugin.Methods.CheckFor035(ev.Player))
                 ev.IsAllowed = false;
@@ -110,8 +113,8 @@ namespace ExiledGaming.EventHandlers
                 ev.IsAllowed = false;
             else
             {
-                string name = ev.Door.GetNametag();
-                if (!string.IsNullOrEmpty(name) && name.Contains("GATE") || name.Contains("914"))
+                string name = ev.Door.Nametag;
+                if (!string.IsNullOrEmpty(name) && (name.Contains("GATE") || name.Contains("914")))
                     _plugin.Methods.CloseDoor(ev.Door);
             }
         }

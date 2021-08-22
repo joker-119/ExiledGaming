@@ -5,6 +5,7 @@ using ExiledGaming.Items;
 
 namespace ExiledGaming.Configs
 {
+    using Exiled.API.Enums;
     using ExiledGaming.Items;
 
     public class Items

@@ -12,7 +12,6 @@ namespace ExiledGaming.Commands
         public ExiledGamingCmd() => LoadGeneratedCommands();
         public override void LoadGeneratedCommands()
         {
-            RegisterCommand(new Fake());
             RegisterCommand(new Disguise());
             RegisterCommand(new TestVictory());
             RegisterCommand(new Hat());

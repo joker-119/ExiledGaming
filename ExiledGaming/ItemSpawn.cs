@@ -1,5 +1,7 @@
 namespace ExiledGaming
 {
+    using Exiled.API.Enums;
+
     public struct ItemSpawn
     {
         public ItemType Type { get; private set; }

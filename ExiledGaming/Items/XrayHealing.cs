@@ -19,7 +19,9 @@ namespace ExiledGaming.Items
         public override string Description { get; set; } =
             "A medicinal serum which, when injected, will allow the user to see through walls similar to SCP-939. Due to dilution, this effect comes with the drawback of reduced healing.";
 
-        public float AdrenalineHealthValue { get; set; } = 50f;
+        public override float Weight { get; set; } = 0.5f;
+
+        public ushort AdrenalineHealthValue { get; set; } = 50;
         public float RawHealthValue { get; set; } = 10f;
         public float StatusEffectDuration { get; set; } = 30f;
 
@@ -43,24 +45,24 @@ namespace ExiledGaming.Items
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.UsingMedicalItem += UsingMedicalItem;
+            Exiled.Events.Handlers.Player.UsingItem += UsingItem;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.UsingMedicalItem -= UsingMedicalItem;
+            Exiled.Events.Handlers.Player.UsingItem -= UsingItem;
             base.UnsubscribeEvents();
         }
 
-        private void UsingMedicalItem(UsingMedicalItemEventArgs ev)
+        private void UsingItem(UsingItemEventArgs ev)
         {
             if (!Check(ev.Player.CurrentItem))
                 return;
 
             Timing.CallDelayed(2.5f, () =>
             {
-                ev.Player.ArtificialHealth -= 30f;
+                ev.Player.ArtificialHealth -= 30;
                 ev.Player.ArtificialHealth += AdrenalineHealthValue;
                 if (ev.Player.Health + RawHealthValue > ev.Player.MaxHealth)
                     ev.Player.Health = ev.Player.MaxHealth;

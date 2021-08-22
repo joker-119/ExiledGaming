@@ -1,5 +1,6 @@
 namespace ExiledGaming.EventHandlers
 {
+    using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Interactables.Interobjects.DoorUtils;
@@ -17,11 +18,11 @@ namespace ExiledGaming.EventHandlers
                 _plugin.Coroutines.Add(Timing.RunCoroutine(_plugin.Methods.DoSurfaceTension()));
             }
 
-            foreach (DoorVariant door in Map.Doors)
-                if (door.GetNametag().Contains("SURFACE"))
+            foreach (Door door in Map.Doors)
+                if (door.Nametag.Contains("SURFACE"))
                 {
-                    door.NetworkTargetState = true;
-                    door.ServerChangeLock(DoorLockReason.Warhead, true);
+                    door.Open = true;
+                    door.DoorLockType = DoorLockType.Warhead;
                 }
         }
     }

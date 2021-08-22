@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace ExiledGaming
 {
+    using Exiled.API.Enums;
+
     public struct HatInfo
     {
         public ItemType Item { get; }

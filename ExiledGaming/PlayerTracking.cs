@@ -18,7 +18,7 @@ namespace ExiledGaming
             RoleType.ClassD,
             RoleType.Scp93953,
             RoleType.FacilityGuard,
-            RoleType.ChaosInsurgency,
+            RoleType.ChaosConscript,
         };
 
         public static void TrackAllRoles()
@@ -76,8 +76,8 @@ namespace ExiledGaming
 
                 switch (selectedType)
                 {
-                    case RoleType.FacilityGuard when Player.Get(RoleType.ChaosInsurgency).Count() > 1:
-                    case RoleType.ChaosInsurgency when Player.Get(RoleType.FacilityGuard).Count() > 1:
+                    case RoleType.FacilityGuard when Player.Get(RoleType.ChaosConscript).Count() > 1:
+                    case RoleType.ChaosConscript when Player.Get(RoleType.FacilityGuard).Count() > 1:
                     case RoleType.Scp93953 when Player.Get(RoleType.Scp93953).Any():
                         continue;
                 }

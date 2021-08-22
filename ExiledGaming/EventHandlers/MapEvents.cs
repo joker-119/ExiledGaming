@@ -12,15 +12,7 @@ namespace ExiledGaming.EventHandlers
         
         public void OnGeneratorActivated(GeneratorActivatedEventArgs ev)
         {
-            try
-            {
-                if (_plugin.Config.GeneratorDischargeDuration > 0)
-                    _plugin.Methods.GeneratorCharge(ev.Generator);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"{nameof(OnGeneratorActivated)}: {e}");
-            }
+            
         }
 
         public void OnDecontaminating(DecontaminatingEventArgs ev)

@@ -21,6 +21,7 @@ using Warhead = Exiled.Events.Handlers.Warhead;
 
 namespace ExiledGaming
 {
+    using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using ExiledGaming.BanSystem;
     using ExiledGaming.Components;
@@ -104,13 +105,13 @@ namespace ExiledGaming
             Player.Joined += PlayerEvents.OnJoined;
             Player.Dying += PlayerEvents.OnPlayerDying;
             Player.Hurting += PlayerEvents.OnHurtingPlayer;
-            Player.ChangedRole += PlayerEvents.OnChangedRole;
+            Player.ChangingRole += PlayerEvents.OnChangedRole;
             Player.PickingUpItem += PlayerEvents.OnPickingUpItem;
             Player.TriggeringTesla += PlayerEvents.OnTriggeringTesla;
             Player.InteractingDoor += PlayerEvents.OnDoorInteraction;
             Player.EnteringPocketDimension += PlayerEvents.OnEnteringPocketDimension;
-            Player.EjectingGeneratorTablet += PlayerEvents.OnEjectingGeneratorTablet;
-            Player.InsertingGeneratorTablet += PlayerEvents.OnInsertingGeneratorTablet;
+            Player.StoppingGenerator += PlayerEvents.OnEjectingGeneratorTablet;
+            Player.ActivatingGenerator += PlayerEvents.OnInsertingGeneratorTablet;
 
             Scp106.Containing += Scp106Events.OnContainingScp106;
             Player.EscapingPocketDimension += Scp106Events.OnEscapingPocketDimension;
@@ -137,9 +138,9 @@ namespace ExiledGaming
                     Object.Destroy(player.GameObject.GetComponent<Scp035Component>());
             }
 
-            foreach (Pickup pickup in Object.FindObjectsOfType<Pickup>())
+            foreach (Pickup pickup in Exiled.API.Features.Map.Pickups)
                 if (Methods.CheckForHat(pickup))
-                    Object.Destroy(pickup);
+                    pickup.Destroy();
 
             Harmony.UnpatchAll();
             
@@ -151,7 +152,7 @@ namespace ExiledGaming
             
             Player.Dying -= PlayerEvents.OnPlayerDying;
             Player.Hurting -= PlayerEvents.OnHurtingPlayer;
-            Player.ChangedRole -= PlayerEvents.OnChangedRole;
+            Player.ChangingRole -= PlayerEvents.OnChangedRole;
             Player.PickingUpItem -= PlayerEvents.OnPickingUpItem;
 
             Server.RoundEnded -= ServerEvents.OnRoundEnded;
