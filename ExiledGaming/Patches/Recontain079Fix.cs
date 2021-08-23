@@ -10,7 +10,7 @@ namespace ExiledGaming.Patches
     [HarmonyPatch(typeof(Recontainer079), nameof(Recontainer079.OnClassChanged))]
     public class Recontain079Fix
     {
-        internal static bool Prefix(ReferenceHub hub, RoleType prevRole, RoleType newRole)
+        internal static bool Prefix(Recontainer079 __instance, ReferenceHub hub, RoleType prevRole, RoleType newRole)
         {
             int num = 0;
 

@@ -8,7 +8,7 @@ namespace ExiledGaming.Patches
     [HarmonyPatch(typeof(CheaterReport), nameof(CheaterReport.IssueReport))]
     public class CheaterReportOverride
     {
-        public static bool Prefix(CheaterReport instance, GameConsoleTransmission reporter,
+        public static bool Prefix(CheaterReport __instance, GameConsoleTransmission reporter,
             string reporterUserId,
             string reportedUserId,
             string reportedAuth,
@@ -22,7 +22,7 @@ namespace ExiledGaming.Patches
         {
             if (reportedAuth == reporterAuth)
             {
-                reporter.SendToClient(instance.connectionToClient, "You can't report yourself!" + Environment.NewLine, "yellow");
+                reporter.SendToClient(__instance.connectionToClient, "You can't report yourself!" + Environment.NewLine, "yellow");
                 return false;
             }
 
@@ -34,9 +34,9 @@ namespace ExiledGaming.Patches
     [HarmonyPatch(typeof(PlayerMovementSync), nameof(PlayerMovementSync.AntiCheatKillPlayer))]
     public class Cheaty
     {
-        public static bool Prefix(PlayerMovementSync instance, string message)
+        public static bool Prefix(PlayerMovementSync __instance, string message)
         {
-            Player player = Player.Get(instance._hub.gameObject);
+            Player player = Player.Get(__instance._hub.gameObject);
             if (player == null)
                 return true;
 			

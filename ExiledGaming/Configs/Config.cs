@@ -23,22 +23,7 @@ namespace ExiledGaming.Configs
 
         [Description("The file name for special configs.")]
         public string SpecialConfigFile { get; set; } = "global.yml";
-        
-        [Description("How long a discharge from an activated generator will last. Set to -1 to disable discharges.")]
-        public float GeneratorDischargeDuration { get; set; } = 15f;
-        
-        [Description("How far infront of the generator it will damage players.")]
-        public float GeneratorDischargeDistance { get; set; } = 5f;
-        
-        [Description("The max angle from straight infront of the center of the generator panel that someone can stand without getting hit.")]
-        public float GeneratorDischargeAngle { get; set; } = 30f;
-        
-        [Description("The status effect to apply to a player when hit by a discharge.")]
-        public EffectType GeneratorDischageEffect { get; set; } = EffectType.Burned;
-        
-        [Description("The duration of the status effect applied when hit by a discharge. Set to -1 to disable. Set to 0 for permanent (lasts until they change roles).")]
-        public float GeneratorDischargeEffectDuration { get; set; } = 10f;
-        
+
         [Description("How long units should be spawn protected from grenades. Set to 0 to disable.")]
         public float SpawnProtection { get; set; } = 30f;
         

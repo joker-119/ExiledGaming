@@ -1,8 +1,5 @@
 using System;
 using CommandSystem;
-using Exiled.API.Features;
-using VoiceChatManager.Api.Audio.Playback;
-using VoiceChatManager.Api.Extensions;
 
 namespace ExiledGaming.Commands
 {
@@ -18,8 +15,8 @@ namespace ExiledGaming.Commands
                 return false;
             }
             
-            Plugin.Instance.Config.SpecialConfigs.DclassVictorySound.TryPlay(100f, "Intercom", out IStreamedMicrophone stream);
-            Log.Debug($"{nameof(TestVictory)}: Playing D-class victory music: {stream.Duration.ToString(VoiceChatManager.VoiceChatManager.Instance.Config.DurationFormat)}");
+            //Plugin.Instance.Config.SpecialConfigs.DclassVictorySound.TryPlay(100f, "Intercom", out IStreamedMicrophone stream);
+            //Log.Debug($"{nameof(TestVictory)}: Playing D-class victory music: {stream.Duration.ToString(VoiceChatManager.VoiceChatManager.Instance.Config.DurationFormat)}");
             response = "The selected sound should now be playing.";
             return true;
         }

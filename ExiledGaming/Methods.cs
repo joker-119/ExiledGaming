@@ -107,19 +107,6 @@ namespace ExiledGaming
             target.UnitName = target.Role.ToString();
         }
 
-        private bool IsPointInsideCone(Vector3 point, Vector3 coneOrigin, Vector3 coneDirection)
-        {
-            float distanceToConeOrigin = (point - coneOrigin).magnitude;
-            
-            if (distanceToConeOrigin > _plugin.Config.GeneratorDischargeDistance) 
-                return false;
-            
-            Vector3 pointDirection = point - coneOrigin;
-            float angle = Vector3.Angle(coneDirection, pointDirection);
-            
-            return angle < _plugin.Config.GeneratorDischargeAngle;
-        }
-
         public IEnumerator<float> DoSurfaceTension()
         {
             if (_plugin.Config.SurfaceTensionDelay < 0)
