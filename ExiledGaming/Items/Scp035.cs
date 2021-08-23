@@ -49,8 +49,8 @@ namespace ExiledGaming.Items
             new ItemSpawn(ItemType.Coin, 10),
             new ItemSpawn(ItemType.Medkit, 20),
             new ItemSpawn(ItemType.Adrenaline, 30),
-            new ItemSpawn(ItemType.Scp018, 60),
-            new ItemSpawn(ItemType.GrenadeHe, 100)
+            new ItemSpawn(ItemType.SCP018, 60),
+            new ItemSpawn(ItemType.GrenadeHE, 100)
         };
 
         public float TransformationDelay { get; set; } = 5f;
@@ -66,7 +66,7 @@ namespace ExiledGaming.Items
         {
             pickup = new Item(RandomType()).Spawn(position);
             pickup.Weight = Weight;
-            Spawned.Add(pickup);
+            TrackedSerials.Add(pickup.Serial);
         }
 
         private ItemType RandomType()

@@ -30,27 +30,27 @@ namespace ExiledGaming
                     rot = Quaternion.Euler(0, 90, 0);
                     itemOffset = new Vector3(0, .1f, 0);
                     break;
-                case ItemType.KeycardNtfCommander:
+                case ItemType.KeycardNTFCommander:
                     item.Scale += new Vector3(1.5f, 200f, 1.5f);
                     rot = Quaternion.Euler(0, 90, 0);
                     itemOffset = new Vector3(0, .9f, 0);
                     break;
-                case ItemType.Scp268:
+                case ItemType.SCP268:
                     item.Scale += new Vector3(-.1f, -.1f, -.1f);
                     rot = Quaternion.Euler(-90, 0, 90);
                     break;
                 case ItemType.Adrenaline:
                 case ItemType.Medkit:
                 case ItemType.Coin:
-                case ItemType.Scp018:
+                case ItemType.SCP018:
                     itemOffset = new Vector3(0, .1f, 0);
                     break;
                 
-                case ItemType.Scp500:
+                case ItemType.SCP500:
                     itemOffset = new Vector3(0, .075f, 0);
                     break;
                 
-                case ItemType.Scp207:
+                case ItemType.SCP207:
                     itemOffset = new Vector3(0, .225f, 0);
                     break;
             }

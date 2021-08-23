@@ -29,7 +29,7 @@ namespace ExiledGaming.Components
 
         public List<string> blacklistedItems = new List<string>
         {
-            ItemType.MicroHid.ToString(),
+            ItemType.MicroHID.ToString(),
             "SR-119",
             "SCP-2818",
             "AutoGun",
@@ -54,11 +54,11 @@ namespace ExiledGaming.Components
             Player.UnitName = "Scp035";
 
             Plugin.Instance.Methods.Scp035Players.Add(Player);
-            HatInfo info = new HatInfo(ItemType.Scp268);
+            HatInfo info = new HatInfo(ItemType.SCP268);
             Player.SetRole(RoleType.Tutorial, SpawnReason.ForceClass, true);
             Player.Health = maxHealth;
             Timing.CallDelayed(1.5f, () => Player.ChangeAppearance(role));
-            Player.SpawnHat(new HatInfo(ItemType.Scp268));
+            Player.SpawnHat(new HatInfo(ItemType.SCP268));
             Player.ShowHint("You have become SCP-035");
             Player.SpawnHat(info);
             Timing.CallDelayed(1f, () => Player.IsGodModeEnabled = false);

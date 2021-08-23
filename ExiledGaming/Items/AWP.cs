@@ -13,6 +13,6 @@ namespace ExiledGaming.Items
         public override SpawnProperties SpawnProperties { get; set; }
         public override Modifiers Modifiers { get; set; }
         public override float Damage { get; set; } = float.MaxValue;
-        public override ItemType Type { get; set; } = ItemType.GunE11Sr;
+        public override ItemType Type { get; set; } = ItemType.GunE11SR;
     }
 }
